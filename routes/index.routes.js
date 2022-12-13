@@ -26,18 +26,26 @@ router.post("/addClass", (req, res) => {
 router.post("/filter", (req, res, next) => {
 
   let { style, objective, intensity, level, duration } = req.body
-  
+
   // - If empty, give value 'All'
   if (style === '') style = 'All'
-  if (objective === []) objective = 'All'
+  if (objective.length === 0) objective = ['All']
   if (intensity === '') intensity = 'All'
   if (level === '') level = 'All'
   if (duration === '') duration = [5, 80]
 
   Class
-    .find({ style: style, intensity: intensity, /*objective: objective,*/ level: level, duration: { $lte: duration[1], $gte: duration[0] } })
+    .find({ style: style, intensity: intensity, objective: { $in: objective }, level: level, duration: { $gte: duration[0], $lte: duration[1] } })
     .then(results => res.status(200).json(results))
     .catch(err => res.status(500).json(err))
+
+  // Class
+  //   .find({ objective: { $in: objective } })
+  //   .then(results => {
+  //     console.log('***** RESULTS ******', results)
+  //     res.status(200).json(results)
+  //   })
+  //   .catch(err => res.status(500).json(err))
 })
 
 
