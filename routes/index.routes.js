@@ -35,17 +35,11 @@ router.post("/filter", (req, res, next) => {
   if (duration === '') duration = [5, 80]
 
   Class
-    .find({ style: style, intensity: intensity, objective: { $in: objective }, level: level, duration: { $gte: duration[0], $lte: duration[1] } })
+    .find(
+      { style: style, intensity: intensity, objective: { $in: objective }, level: level, duration: { $gte: duration[0], $lte: duration[1] } },
+      { videoLink: 0, __v: 0, updatedAt: 0 })
     .then(results => res.status(200).json(results))
     .catch(err => res.status(500).json(err))
-
-  // Class
-  //   .find({ objective: { $in: objective } })
-  //   .then(results => {
-  //     console.log('***** RESULTS ******', results)
-  //     res.status(200).json(results)
-  //   })
-  //   .catch(err => res.status(500).json(err))
 })
 
 
